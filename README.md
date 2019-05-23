@@ -1,2 +1,2 @@
-# sbms-template
-Template project for microservice (Spring Boot)
+# sbms-sample
+Sample project for microservice (Spring Boot)
