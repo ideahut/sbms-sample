@@ -19,6 +19,7 @@ import com.ideahut.sbms.sample.api.entity.Access;
 import com.ideahut.sbms.sample.api.entity.User;
 import com.ideahut.sbms.sample.api.repository.AccessRepository;
 import com.ideahut.sbms.sample.api.support.AppConstant;
+import com.ideahut.sbms.sample.client.Constants;
 
 public class AccessExporterInterceptor implements ServiceExporterInterceptor {
 	
@@ -51,7 +52,7 @@ public class AccessExporterInterceptor implements ServiceExporterInterceptor {
 		Login annotLogin 	= method.getAnnotation(Login.class);
 		boolean mustLogin 	= annotLogin == null || annotLogin.value() == true;
 		
-		String key = (String)request.getAttribute(AppConstant.Request.Attribute.ACCESS_KEY);		
+		String key = (String)request.getAttribute(Constants.Request.Attribute.ACCESS_KEY);		
 		if (!isPublic && key == null) {
 			return ResponseDto.ERROR(messageHelper.getCodeMessage("E.01", "LBL.ACCESS"));
 		}
@@ -85,7 +86,7 @@ public class AccessExporterInterceptor implements ServiceExporterInterceptor {
 			AuditHolder.setAuditor(user.getId() + "::" + user.getUsername());
 		}
 		
-		String language = (String)request.getAttribute(AppConstant.Request.Attribute.LANGUAGE);
+		String language = (String)request.getAttribute(Constants.Request.Attribute.LANGUAGE);
 		MessageHelper.LanguageHolder.set(language);
 		AccessHolder.set(new AccessInfo(key, access, null, request).setAccessPublic(isPublic).setMustLogin(mustLogin));
 				

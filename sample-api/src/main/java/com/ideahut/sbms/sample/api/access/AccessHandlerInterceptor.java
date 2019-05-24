@@ -30,6 +30,7 @@ import com.ideahut.sbms.sample.api.entity.Access;
 import com.ideahut.sbms.sample.api.entity.User;
 import com.ideahut.sbms.sample.api.repository.AccessRepository;
 import com.ideahut.sbms.sample.api.support.AppConstant;
+import com.ideahut.sbms.sample.client.Constants;
 
 public class AccessHandlerInterceptor extends HandlerInterceptorAdapter implements InitializingBean {
 	
@@ -81,7 +82,7 @@ public class AccessHandlerInterceptor extends HandlerInterceptorAdapter implemen
 		Login annotLogin 	= method.getAnnotation(Login.class);
 		boolean mustLogin 	= annotLogin == null || annotLogin.value() == true;
 		
-		String key = RequestUtil.getHeader(request, AppConstant.Request.Header.ACCESS_KEY);		
+		String key = RequestUtil.getHeader(request, Constants.Request.Header.ACCESS_KEY);		
 		if (!isPublic && key == null) {
 			throw new ResponseException(ResponseDto.ERROR(messageHelper.getCodeMessage("E.01", "LBL.ACCESS")));
 		}

@@ -1,0 +1,7 @@
+sample-api/logs/*
+sample-api/target/*
+sample-client/logs/*
+sample-client/target/*
+sample-view/logs/*
+sample-view/target/*
+sample-view/bin/*

@@ -28,7 +28,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.ideahut.sbms.sample.api.access.AccessHandlerInterceptor;
-import com.ideahut.sbms.sample.api.support.AppConstant;
+import com.ideahut.sbms.sample.client.Constants;
 
 @Configuration
 @EnableWebMvc
@@ -49,7 +49,7 @@ public class WebConfig implements WebMvcConfigurer {
 		configurer
 		
 		// parameter
-		.parameterName(AppConstant.Request.Parameter.FORMAT)
+		.parameterName(Constants.Request.Parameter.FORMAT)
 		.favorParameter(false) // set true untuk baca format dari paramaeter (nilainya sesua dengan mediaType yg didaftarkan)
 		
 		// extension
