@@ -1,4 +1,4 @@
-package com.idh.ms.view;
+package test.ideahut.sbms.sample.view;
 
 import org.junit.Test;
 import org.springframework.boot.test.context.SpringBootTest;
