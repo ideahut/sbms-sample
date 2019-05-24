@@ -1,4 +1,4 @@
-package com.ideahut.sbms.sample.api.impl;
+package com.ideahut.sbms.sample.api.service.impl;
 
 import org.springframework.stereotype.Service;
 
