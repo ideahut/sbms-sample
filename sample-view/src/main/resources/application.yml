@@ -1,0 +1,56 @@
+server:
+  port: 8088
+  #servlet-path: /*
+
+spring:
+  application:
+    name: view
+  main:
+    banner-mode: "off"  
+  autoconfigure:
+    exclude:
+    - org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+  mvc:
+    view: 
+      prefix: /WEB-INF/jsp/
+      suffix: .jsp
+  #datasource:
+    #driver-class-name: com.mysql.cj.jdbc.Driver
+    #url: jdbc:mysql://localhost:3306/microservice_template?createDatabaseIfNotExist=true&autoReconnect=true
+    #username: root
+    #password: root
+  #jpa:
+    #database: MYSQL
+    #show-sql: false
+    #hibernate:
+      #ddl-auto: update
+    #properties:
+      #hibernate:
+        #dialect: org.hibernate.dialect.MySQL5InnoDBDialect          
+  #jackson:
+    #default-property-inclusion: non_null
+  #profiles:
+    #active: local
+
+task:
+  executor:
+    corePoolSize: 4
+    maxPoolSize: 8
+    threadNamePrefix: SBMS_SAMPLE_VIEW
+
+default:
+  locale: in
+  
+logging:
+  level:
+    org:
+      hibernate: INFO
+      springframework: INFO
+    com:
+      idh:
+        microservice:
+          core: DEBUG
+  file: /var/log/sbms_sample_view.log
+  pattern:
+    console: '%d %p [%X{traceId}] %F\(%M:%L\) : %msg%n'
+    file: '%d %p [%X{traceId}] %F\(%M:%L\) : %msg%n'

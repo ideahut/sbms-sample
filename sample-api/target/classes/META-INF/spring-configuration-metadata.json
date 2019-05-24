@@ -1,0 +1,81 @@
+{
+  "groups": [
+    {
+      "name": "app",
+      "type": "com.ideahut.sbms.sample.api.config.AppProperties",
+      "sourceType": "com.ideahut.sbms.sample.api.config.AppProperties"
+    },
+    {
+      "name": "app.cache",
+      "type": "com.ideahut.sbms.sample.api.config.AppProperties$Cache",
+      "sourceType": "com.ideahut.sbms.sample.api.config.AppProperties",
+      "sourceMethod": "public com.ideahut.sbms.sample.api.config.AppProperties.Cache getCache() "
+    },
+    {
+      "name": "app.language",
+      "type": "com.ideahut.sbms.sample.api.config.AppProperties$Language",
+      "sourceType": "com.ideahut.sbms.sample.api.config.AppProperties",
+      "sourceMethod": "public com.ideahut.sbms.sample.api.config.AppProperties.Language getLanguage() "
+    },
+    {
+      "name": "app.task",
+      "type": "com.ideahut.sbms.sample.api.config.AppProperties$Task",
+      "sourceType": "com.ideahut.sbms.sample.api.config.AppProperties",
+      "sourceMethod": "public com.ideahut.sbms.sample.api.config.AppProperties.Task getTask() "
+    },
+    {
+      "name": "app.task.executor",
+      "type": "com.ideahut.sbms.sample.api.config.AppProperties$Task$Executor",
+      "sourceType": "com.ideahut.sbms.sample.api.config.AppProperties$Task",
+      "sourceMethod": "public com.ideahut.sbms.sample.api.config.AppProperties.Task.Executor getExecutor() "
+    }
+  ],
+  "properties": [
+    {
+      "name": "app.cache.configuration",
+      "type": "java.util.Map<java.lang.String,java.lang.String>",
+      "sourceType": "com.ideahut.sbms.sample.api.config.AppProperties$Cache"
+    },
+    {
+      "name": "app.cache.groups",
+      "type": "java.util.List<com.ideahut.sbms.sample.api.config.AppProperties$Cache$Group>",
+      "sourceType": "com.ideahut.sbms.sample.api.config.AppProperties$Cache"
+    },
+    {
+      "name": "app.ignored-handler-classes",
+      "type": "java.util.List<java.lang.Class<?>>",
+      "sourceType": "com.ideahut.sbms.sample.api.config.AppProperties"
+    },
+    {
+      "name": "app.language.primary",
+      "type": "java.util.Locale",
+      "sourceType": "com.ideahut.sbms.sample.api.config.AppProperties$Language"
+    },
+    {
+      "name": "app.language.supported",
+      "type": "java.util.List<java.util.Locale>",
+      "sourceType": "com.ideahut.sbms.sample.api.config.AppProperties$Language"
+    },
+    {
+      "name": "app.remote-method-services",
+      "type": "java.util.List<java.lang.Class<?>>",
+      "sourceType": "com.ideahut.sbms.sample.api.config.AppProperties"
+    },
+    {
+      "name": "app.task.executor.core-pool-size",
+      "type": "java.lang.Integer",
+      "sourceType": "com.ideahut.sbms.sample.api.config.AppProperties$Task$Executor"
+    },
+    {
+      "name": "app.task.executor.max-pool-size",
+      "type": "java.lang.Integer",
+      "sourceType": "com.ideahut.sbms.sample.api.config.AppProperties$Task$Executor"
+    },
+    {
+      "name": "app.task.executor.thread-name-prefix",
+      "type": "java.lang.String",
+      "sourceType": "com.ideahut.sbms.sample.api.config.AppProperties$Task$Executor"
+    }
+  ],
+  "hints": []
+}
