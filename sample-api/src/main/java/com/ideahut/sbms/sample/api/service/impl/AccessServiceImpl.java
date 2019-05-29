@@ -64,18 +64,18 @@ public class AccessServiceImpl implements AccessService {
 		} else {
 			access = info.getAccess();
 			if (access == null) {
-				throw new ResponseRuntimeException(ResponseDto.ERROR(messageHelper.getCodeMessage("E.02", "LBL.ACCESS")));
+				throw new ResponseRuntimeException(ResponseDto.ERROR(messageHelper.getCodeMessage("E.02", true, "LBL.ACCESS")));
 			}
 			if (info.getHttpRequest() != null) {
 				String validation = info.getHttpRequest().getRemoteAddr() + " " + info.getHeader("User-Agent");
 				if (!validation.equals(access.getValidation())) {
-					throw new ResponseRuntimeException(ResponseDto.ERROR(messageHelper.getCodeMessage("E.06", "LBL.ACCESS")));
+					throw new ResponseRuntimeException(ResponseDto.ERROR(messageHelper.getCodeMessage("E.06", true, "LBL.ACCESS")));
 				}
 			}			
 			if (access.hasExpired()) {
 				cacheGroup.remove(AppConstant.CacheGroup.ACCESS, key);
 				accessRepository.deleteById(key);
-				throw new ResponseRuntimeException(ResponseDto.ERROR(messageHelper.getCodeMessage("E.04", "LBL.ACCESS")));
+				throw new ResponseRuntimeException(ResponseDto.ERROR(messageHelper.getCodeMessage("E.04", true, "LBL.ACCESS")));
 			}
 		}
 		if (access != null) {

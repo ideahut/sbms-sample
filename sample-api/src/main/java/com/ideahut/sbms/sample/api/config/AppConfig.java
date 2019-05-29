@@ -1,5 +1,8 @@
 package com.ideahut.sbms.sample.api.config;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.sql.DataSource;
 
 import org.modelmapper.ModelMapper;
@@ -22,10 +25,16 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.ideahut.sbms.client.service.RemoteMethodService;
 import com.github.ideahut.sbms.shared.audit.AuditExecutor;
 import com.github.ideahut.sbms.shared.audit.AuditExecutorImpl;
+import com.github.ideahut.sbms.shared.audit.handler.AuditHandler;
+import com.github.ideahut.sbms.shared.audit.handler.TransactionManagerAuditHandler;
+import com.github.ideahut.sbms.shared.audit.interceptor.TransactionManagerAuditEntityInterceptor;
+import com.github.ideahut.sbms.shared.entity.EntityInterceptor;
 import com.github.ideahut.sbms.shared.remote.RemoteMethodServiceImpl;
 import com.github.ideahut.sbms.shared.remote.service.ServiceExporterInterceptor;
 import com.github.ideahut.sbms.shared.repo.optional.AuditRepository;
+import com.github.ideahut.sbms.shared.repo.optional.SysParamRepository;
 import com.ideahut.sbms.sample.api.access.AccessExporterInterceptor;
+import com.ideahut.sbms.sample.api.access.AccessHandlerInterceptor;
 
 @Configuration
 @ComponentScan({
@@ -41,7 +50,10 @@ import com.ideahut.sbms.sample.api.access.AccessExporterInterceptor;
 @EnableJpaRepositories(
 	basePackages = {
 		"com.ideahut.sbms.sample.api.repository",
-		"com.github.ideahut.sbms.shared.repo.optional",
+		//"com.github.ideahut.sbms.shared.repo.optional",
+	},
+	basePackageClasses = {
+		SysParamRepository.class
 	}
 )
 public class AppConfig {
@@ -79,7 +91,6 @@ public class AppConfig {
         executor.setCorePoolSize(appProperties.getTask().getExecutor().getCorePoolSize());
         executor.setMaxPoolSize(appProperties.getTask().getExecutor().getMaxPoolSize());
         executor.setThreadNamePrefix(appProperties.getTask().getExecutor().getThreadNamePrefix());
-        executor.initialize();
         return executor;
     }
 	
@@ -97,15 +108,45 @@ public class AppConfig {
 	}
 	
 	@Bean
+	public AuditHandler auditHandler() {
+		TransactionManagerAuditHandler auditHandler = new TransactionManagerAuditHandler();
+		auditHandler.setApplicationContext(applicationContext);
+		auditHandler.setCreateEntityAuditTable(true);
+		auditHandler.setEntityAuditTableSuffix("audit");
+		
+		//RepositoryAuditHandler auditHandler = new RepositoryAuditHandler();
+		//auditHandler.setAuditRepository(auditRepository);
+		
+		return auditHandler;
+	}
+	
+	@Bean
 	public AuditExecutor auditExecutor(AuditRepository auditRepository) {
 		AuditExecutorImpl executor = new AuditExecutorImpl();
-		executor.setAuditRepository(auditRepository);
+		executor.setTaskExecutor(taskExecutor());
+		executor.setAuditHandler(auditHandler());
 		return executor;
 	}
 	
 	@Bean
+	public List<EntityInterceptor> listEntityInterceptor() {
+		List<EntityInterceptor> list = new ArrayList<EntityInterceptor>();
+		list.add(new TransactionManagerAuditEntityInterceptor());
+		//list.add(new DefaultAuditEntityInterceptor());
+		return list;
+	}
+	
+	@Bean
 	public ServiceExporterInterceptor serviceExporterInterceptor() {
-		return new AccessExporterInterceptor();
+		return new AccessExporterInterceptor()
+			.setEntityInterceptors(listEntityInterceptor());
+	}
+	
+	@Bean
+	public AccessHandlerInterceptor accessHandlerInterceptor() {
+		return new AccessHandlerInterceptor()
+			.setIgnoredHandlerClasses(appProperties.getIgnoredHandlerClasses())
+			.setEntityInterceptors(listEntityInterceptor());
 	}
 	
 	@Bean
@@ -115,6 +156,8 @@ public class AppConfig {
 		service.setInterceptor(serviceExporterInterceptor());
 		service.setServiceInterfaces(appProperties.getRemoteMethodServices());
 		return service;
-	}	
+	}
+	
+	
 	
 }

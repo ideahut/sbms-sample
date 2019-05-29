@@ -5,7 +5,6 @@ import java.util.Collections;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.InvalidMediaTypeException;
@@ -35,7 +34,7 @@ import com.ideahut.sbms.sample.client.Constants;
 public class WebConfig implements WebMvcConfigurer {
 	
 	@Autowired
-	private AppProperties appProperties;
+	private AccessHandlerInterceptor accessHandlerInterceptor;
 	
 	@Autowired
 	private ObjectMapper objectMapper;
@@ -121,14 +120,8 @@ public class WebConfig implements WebMvcConfigurer {
 
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
-		registry.addInterceptor(accessHandlerInterceptor());
+		registry.addInterceptor(accessHandlerInterceptor);
 		WebMvcConfigurer.super.addInterceptors(registry);
-	}
-	
-
-	@Bean
-	public AccessHandlerInterceptor accessHandlerInterceptor() {
-		return new AccessHandlerInterceptor().setIgnoredHandlerClasses(appProperties.getIgnoredHandlerClasses());
-	}	
+	}		
 	
 }

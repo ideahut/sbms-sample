@@ -120,11 +120,18 @@ public class TestController {
 	@RequestMapping(value = "/audit", method = {RequestMethod.GET, RequestMethod.POST})
     @ApiOperation("Audit")
     public ResponseDto audit() {
+		
 		LOGGER.info("AUDIT");
 		Test test = new Test();
 		test.setName("AUDIT");
 		test = testRepository.save(test);
 		return ResponseDto.SUCCESS(modelMapper.map(test, TestDto.class));
+		
+		/*
+		Test test = testRepository.findById(1L).get();
+		testRepository.delete(test);
+		return ResponseDto.SUCCESS(modelMapper.map(test, TestDto.class));
+		*/
 	}
 	
 	

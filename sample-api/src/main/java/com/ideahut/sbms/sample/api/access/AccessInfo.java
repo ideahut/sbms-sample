@@ -130,11 +130,8 @@ public class AccessInfo {
 	public String getValue(String name) {
 		if (exporterRequest != null) {
 			Serializable value = exporterRequest.getAttribute(name);
-			if (value == null) {
-				value = exporterRequest.getAttribute(name.toLowerCase());
-			}
 			if (value != null) {
-				return value + "";
+				return String.valueOf(value);
 			}
 		}
 		return getHeader(name); 

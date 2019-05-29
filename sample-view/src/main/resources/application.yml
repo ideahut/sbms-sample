@@ -1,10 +1,11 @@
 server:
   port: 8088
-  #servlet-path: /*
+  #servlet:
+    #context-path: /view
 
 spring:
   application:
-    name: view
+    name: sbms_sample_view
   main:
     banner-mode: "off"  
   autoconfigure:
@@ -12,7 +13,7 @@ spring:
     - org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
   mvc:
     view: 
-      prefix: /WEB-INF/jsp/
+      prefix: /WEB-INF/pages/
       suffix: .jsp
   #datasource:
     #driver-class-name: com.mysql.cj.jdbc.Driver
@@ -32,25 +33,34 @@ spring:
   #profiles:
     #active: local
 
-task:
-  executor:
-    corePoolSize: 4
-    maxPoolSize: 8
-    threadNamePrefix: SBMS_SAMPLE_VIEW
+app:
+  task:
+    executor:
+      corePoolSize: 4
+      maxPoolSize: 8
+      threadNamePrefix: SBMS_SAMPLE_VIEW
+  language:
+    supported:
+      - in
+      - en
+    primary: in
+  initial:
+    page: /home
+    theme: theme-red
+      
 
-default:
-  locale: in
-  
+
 logging:
+  file: /var/log/sbms_sample_view.log
+  pattern:
+    console: '%d %p [%X{traceId}] %F\(%M:%L\) : %msg%n'
+    file: '%d %p [%X{traceId}] %F\(%M:%L\) : %msg%n'
   level:
     org:
       hibernate: INFO
       springframework: INFO
     com:
-      idh:
-        microservice:
-          core: DEBUG
-  file: /var/log/sbms_sample_view.log
-  pattern:
-    console: '%d %p [%X{traceId}] %F\(%M:%L\) : %msg%n'
-    file: '%d %p [%X{traceId}] %F\(%M:%L\) : %msg%n'
+      ideahut:
+        sbms:
+          sample:
+            api: DEBUG

@@ -60,7 +60,6 @@ public class MessageConfig {
 		MessageHelperImpl messageHelper = new MessageHelperImpl();
 		messageHelper.setLocaleResolver(localeResolver());
 		messageHelper.setMessageSource(messageSource());
-		messageHelper.setCheckArguments(true);
 		return messageHelper;
 	}
 	

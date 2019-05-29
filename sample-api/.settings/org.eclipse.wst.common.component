@@ -9,6 +9,9 @@
         <dependent-module archiveName="sample-client-1.0.0.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/sample-client/sample-client">
             <dependency-type>uses</dependency-type>
         </dependent-module>
+        <dependent-module archiveName="sbms-shared-2.0.0.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/sbms-shared/sbms-shared">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
         <property name="java-output-path" value="/sipg-tokenization/build/classes"/>
         <property name="context-root" value="sample-api"/>
     </wb-module>

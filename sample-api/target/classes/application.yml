@@ -4,10 +4,10 @@ server:
     #context-path: /api
 
 spring:
+  application:
+    name: sbms_sample_api
   main:
     banner-mode: "off"
-  application:
-    name: core
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/sbms_sample_api?createDatabaseIfNotExist=true&autoReconnect=true
@@ -74,20 +74,20 @@ swagger:
     
       
 logging:
+  file: /var/log/sbms_sample_api.log
+  pattern:
+    console: '%d %p [%X{traceId}] %F\(%M:%L\) : %msg%n'
+    file: '%d %p [%X{traceId}] %F\(%M:%L\) : %msg%n'
   level:
     org:
       hibernate: INFO
       springframework: INFO
     com:
-      idh:
-        ms:
-          core: DEBUG
-  file: /var/log/sbms_sample_api.log
-  pattern:
-    console: '%d %p [%X{traceId}] %F\(%M:%L\) : %msg%n'
-    file: '%d %p [%X{traceId}] %F\(%M:%L\) : %msg%n'
-
-
+      ideahut:
+        sbms:
+          sample:
+            api: DEBUG
+  
 cors:
   origin: "*"
   headers: X-Requested-With, Content-Type, Accept, Origin, Authorization

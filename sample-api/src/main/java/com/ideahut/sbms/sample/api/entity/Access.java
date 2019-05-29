@@ -19,10 +19,12 @@ import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
+import com.github.ideahut.sbms.shared.annotation.Auditable;
 import com.github.ideahut.sbms.shared.entity.EntityTime;
 
 @Entity
 @Table(name = "t_access")
+@Auditable
 @SuppressWarnings("serial")
 public class Access extends EntityTime<String> {
 	

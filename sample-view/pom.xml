@@ -8,6 +8,7 @@
 	<version>1.0.0</version>
 	<name>sample-view</name>
 	<description>Sample View</description>
+	<url>https://github.com/ideahut/sbms-sample/sample-api</url>
 	
 	<!-- Untuk war, lokasi WEB-INF di src/main/webapp -->
 	<packaging>war</packaging>
@@ -42,21 +43,21 @@
 		<dependency>
 			<groupId>com.github.ideahut</groupId>
 			<artifactId>sbms-client</artifactId>
-			<version>1.0.1</version>		
+			<version>2.0.0</version>
 		</dependency>
 		
 		<!-- SBMS-COMMON -->
 		<dependency>
 			<groupId>com.github.ideahut</groupId>
 			<artifactId>sbms-common</artifactId>
-			<version>1.0.1</version>			
+			<version>2.0.0</version>			
 		</dependency>
 	
 		<!-- SBMS-SHARED -->
 		<dependency>
 			<groupId>com.github.ideahut</groupId>
 			<artifactId>sbms-shared</artifactId>
-			<version>1.0.1</version>
+			<version>2.0.0</version>
 		</dependency>
 		
 		<!-- SPRINGBOOT -->
@@ -70,9 +71,16 @@
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-configuration-processor</artifactId>
+			<optional>true</optional>
+		</dependency>
+		<!--  
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-devtools</artifactId>
 			<scope>runtime</scope>
 		</dependency>
+		-->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
@@ -102,7 +110,25 @@
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>jstl</artifactId>
+            <scope>provided</scope>
         </dependency>
+		
+		<!-- JACKSON -->
+		<dependency>
+			<groupId>com.fasterxml.jackson.dataformat</groupId>
+			<artifactId>jackson-dataformat-xml</artifactId>
+		</dependency>
+		
+		<!-- APACHE COMMONS -->
+		<dependency>
+		    <groupId>org.apache.commons</groupId>
+		    <artifactId>commons-lang3</artifactId>		    
+		</dependency>
+		<dependency>
+		    <groupId>commons-io</groupId>
+		    <artifactId>commons-io</artifactId>
+		    <version>2.6</version>
+		</dependency>
 		
 	</dependencies>
 

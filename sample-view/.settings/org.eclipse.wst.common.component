@@ -5,9 +5,11 @@
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/java"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/resources"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/main/webapp"/>
-        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/test/java"/>
-        <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/test/resources"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/.apt_generated"/>
         <dependent-module archiveName="sample-client-1.0.0.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/sample-client/sample-client">
+            <dependency-type>uses</dependency-type>
+        </dependent-module>
+        <dependent-module archiveName="sbms-shared-2.0.0.jar" deploy-path="/WEB-INF/lib" handle="module:/resource/sbms-shared/sbms-shared">
             <dependency-type>uses</dependency-type>
         </dependent-module>
         <property name="java-output-path" value="/view/target/classes"/>

@@ -6,6 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.Index;
 import javax.persistence.Table;
 
+import com.github.ideahut.sbms.shared.annotation.Auditable;
 import com.github.ideahut.sbms.shared.entity.EntityLongIdTimeVersion;
 import com.github.ideahut.sbms.shared.entity.embed.Address;
 import com.github.ideahut.sbms.shared.entity.embed.Contact;
@@ -13,6 +14,7 @@ import com.github.ideahut.sbms.shared.entity.embed.Person;
 
 @Entity
 @Table(name = "t_user", indexes = {@Index(name = "login_idx", columnList = "username,password")})
+@Auditable
 @SuppressWarnings("serial")
 public class User extends EntityLongIdTimeVersion {
 	

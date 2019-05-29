@@ -1,7 +1,10 @@
 package com.ideahut.sbms.sample.api.access;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
 
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.github.ideahut.sbms.client.dto.ResponseDto;
@@ -10,8 +13,11 @@ import com.github.ideahut.sbms.common.cache.CacheGroup;
 import com.github.ideahut.sbms.shared.annotation.Login;
 import com.github.ideahut.sbms.shared.annotation.Public;
 import com.github.ideahut.sbms.shared.audit.AuditExecutor;
-import com.github.ideahut.sbms.shared.audit.AuditHolder;
+import com.github.ideahut.sbms.shared.audit.Auditor;
+import com.github.ideahut.sbms.shared.entity.EntityInterceptor;
 import com.github.ideahut.sbms.shared.helper.MessageHelper;
+import com.github.ideahut.sbms.shared.moment.MomentAttributes;
+import com.github.ideahut.sbms.shared.moment.MomentHolder;
 import com.github.ideahut.sbms.shared.remote.service.ServiceExporterInterceptor;
 import com.github.ideahut.sbms.shared.remote.service.ServiceExporterRequest;
 import com.github.ideahut.sbms.shared.remote.service.ServiceExporterResult;
@@ -21,7 +27,7 @@ import com.ideahut.sbms.sample.api.repository.AccessRepository;
 import com.ideahut.sbms.sample.api.support.AppConstant;
 import com.ideahut.sbms.sample.client.Constants;
 
-public class AccessExporterInterceptor implements ServiceExporterInterceptor {
+public class AccessExporterInterceptor implements ServiceExporterInterceptor, InitializingBean {
 	
 	@Autowired(required = false)
 	private AuditExecutor auditExecutor;
@@ -35,6 +41,42 @@ public class AccessExporterInterceptor implements ServiceExporterInterceptor {
 	@Autowired
 	private AccessRepository accessRepository;
 	
+	private List<EntityInterceptor> entityInterceptors;
+	
+	public AccessExporterInterceptor setEntityInterceptors(List<EntityInterceptor> entityInterceptors) {
+		this.entityInterceptors = entityInterceptors;
+		return this;
+	}
+	
+	public AccessExporterInterceptor addEntityInterceptor(EntityInterceptor entityInterceptor) {
+		if (entityInterceptors == null) {
+			entityInterceptors = new ArrayList<EntityInterceptor>();
+		}
+		entityInterceptors.add(entityInterceptor);
+		return this;
+	}
+	
+	@Override
+	public void afterPropertiesSet() throws Exception {
+		/*
+		if (auditExecutor != null) {
+			if (entityInterceptors == null) {
+				entityInterceptors = new ArrayList<EntityInterceptor>();
+			}
+			boolean available = false;
+			for (EntityInterceptor interceptor : entityInterceptors) {
+				if (interceptor instanceof DefaultAuditEntityInterceptor) {
+					available = true;
+					break;
+				}
+			}
+			if (!available) {
+				entityInterceptors.add(new DefaultAuditEntityInterceptor());
+			}
+		}
+		*/
+	}
+
 	@Override
 	public ResponseDto beforeInvoke(ServiceExporterRequest request) {
 		Method method = request.getMethod();
@@ -54,7 +96,7 @@ public class AccessExporterInterceptor implements ServiceExporterInterceptor {
 		
 		String key = (String)request.getAttribute(Constants.Request.Attribute.ACCESS_KEY);		
 		if (!isPublic && key == null) {
-			return ResponseDto.ERROR(messageHelper.getCodeMessage("E.01", "LBL.ACCESS"));
+			return ResponseDto.ERROR(messageHelper.getCodeMessage("E.01", true, "LBL.ACCESS"));
 		}
 		
 		Access access = null;
@@ -62,7 +104,7 @@ public class AccessExporterInterceptor implements ServiceExporterInterceptor {
 			access = cacheGroup.get(AppConstant.CacheGroup.ACCESS, key);
 			if (!isPublic) {			
 				if (access == null) {
-					return ResponseDto.ERROR(messageHelper.getCodeMessage("E.02", "LBL.ACCESS"));
+					return ResponseDto.ERROR(messageHelper.getCodeMessage("E.02", true, "LBL.ACCESS"));
 				}
 				// TODO: perlu dicari mekanisme validasi untuk ServiceExporter
 				//String validation = request.getRemoteAddr() + " " + RequestUtil.getHeader(HttpHeaders.USER_AGENT);
@@ -72,7 +114,7 @@ public class AccessExporterInterceptor implements ServiceExporterInterceptor {
 				if (access.hasExpired()) {
 					cacheGroup.remove(AppConstant.CacheGroup.ACCESS, key);
 					accessRepository.deleteById(key);
-					return ResponseDto.ERROR(messageHelper.getCodeMessage("E.04", "LBL.ACCESS"));
+					return ResponseDto.ERROR(messageHelper.getCodeMessage("E.04", true, "LBL.ACCESS"));
 				}				
 				User user = access.getUser();
 				if (mustLogin && user == null) {
@@ -80,14 +122,14 @@ public class AccessExporterInterceptor implements ServiceExporterInterceptor {
 				}				
 			}
 		}
-		
+		MomentAttributes momentAttributes = MomentHolder.findMomentAttributes(true);
 		User user = access != null ? access.getUser() : null;
-		if (auditExecutor != null && user != null) {
-			AuditHolder.setAuditor(user.getId() + "::" + user.getUsername());
+		if (user != null) {
+			momentAttributes.setAuditor(new Auditor(String.valueOf(user.getId()), user.getUsername()));
 		}
-		
+		momentAttributes.setEntityInterceptorList(entityInterceptors);
 		String language = (String)request.getAttribute(Constants.Request.Attribute.LANGUAGE);
-		MessageHelper.LanguageHolder.set(language);
+		momentAttributes.setLanguage(language);
 		AccessHolder.set(new AccessInfo(key, access, null, request).setAccessPublic(isPublic).setMustLogin(mustLogin));
 				
 		return null;
@@ -98,8 +140,7 @@ public class AccessExporterInterceptor implements ServiceExporterInterceptor {
 		if (auditExecutor != null) {
 			auditExecutor.run();
 		}
-		AuditHolder.removeAuditor();
-		MessageHelper.LanguageHolder.remove();
+		MomentHolder.removeMomentAttributes();
 		AccessHolder.remove();
 	}
 	
