@@ -1,9 +1,0 @@
-Manifest-Version: 1.0
-Implementation-Title: sample-api
-Implementation-Version: 1.0.0
-Built-By: adminsys
-Implementation-Vendor-Id: com.ideahut.sbms.sample
-Build-Jdk: 1.8.0_131
-Implementation-URL: https://github.com/ideahut/sbms-sample/sample-api
-Created-By: Maven Integration for Eclipse
-
