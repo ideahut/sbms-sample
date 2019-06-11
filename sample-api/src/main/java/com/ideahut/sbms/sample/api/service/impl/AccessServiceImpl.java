@@ -11,6 +11,7 @@ import com.github.ideahut.sbms.client.dto.ResponseDto;
 import com.github.ideahut.sbms.client.exception.ResponseRuntimeException;
 import com.github.ideahut.sbms.common.cache.CacheGroup;
 import com.github.ideahut.sbms.common.util.DigestUtil;
+import com.github.ideahut.sbms.common.util.TimeUtil;
 import com.github.ideahut.sbms.shared.annotation.Login;
 import com.github.ideahut.sbms.shared.annotation.Public;
 import com.github.ideahut.sbms.shared.helper.MessageHelper;
@@ -57,7 +58,7 @@ public class AccessServiceImpl implements AccessService {
 				String validation = request.getRemoteAddr() + " " + RequestUtil.getHeader(HttpHeaders.USER_AGENT);
 				access.setValidation(validation);
 			}
-			Long expiration = Access.currentTimeMillis() + (3600 * 24 * 1000); // 24 jam			
+			Long expiration = TimeUtil.getGMTCurrentTimeMillis() + (3600 * 24 * 1000); // 24 jam			
 			access.setExpiration(expiration);
 			access.setUser(null);
 			access = accessRepository.save(access);
@@ -67,7 +68,8 @@ public class AccessServiceImpl implements AccessService {
 				throw new ResponseRuntimeException(ResponseDto.ERROR(messageHelper.getCodeMessage("E.02", true, "LBL.ACCESS")));
 			}
 			if (info.getHttpRequest() != null) {
-				String validation = info.getHttpRequest().getRemoteAddr() + " " + info.getHeader("User-Agent");
+				HttpServletRequest request = info.getHttpRequest();
+				String validation = request.getRemoteAddr() + " " + RequestUtil.getHeader(request, HttpHeaders.USER_AGENT);
 				if (!validation.equals(access.getValidation())) {
 					throw new ResponseRuntimeException(ResponseDto.ERROR(messageHelper.getCodeMessage("E.06", true, "LBL.ACCESS")));
 				}

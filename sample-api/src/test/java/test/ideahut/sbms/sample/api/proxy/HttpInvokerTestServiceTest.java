@@ -23,6 +23,7 @@ public class HttpInvokerTestServiceTest {
 		System.out.println(service.add(1, 3));
 		System.out.println(service.code());
 		System.out.println(service.text("XXXX"));
+		System.out.println(service.test(null));
 		time = System.currentTimeMillis() - time;
 		System.out.println(">>> Process Time: " + time + " ms");
 	}

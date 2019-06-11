@@ -1,5 +1,6 @@
 package com.ideahut.sbms.sample.api.controller;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.modelmapper.ModelMapper;
@@ -16,15 +17,18 @@ import com.github.ideahut.sbms.client.dto.CodeMessageDto;
 import com.github.ideahut.sbms.client.dto.ResponseDto;
 import com.github.ideahut.sbms.common.cache.CacheGroup;
 import com.github.ideahut.sbms.shared.annotation.Public;
-import com.github.ideahut.sbms.shared.entity.optional.SysParam;
+import com.github.ideahut.sbms.shared.audit.Auditor;
 import com.github.ideahut.sbms.shared.helper.MessageHelper;
-import com.github.ideahut.sbms.shared.mapper.optional.SysParamMapper;
-import com.github.ideahut.sbms.shared.repo.optional.SysParamRepository;
-import com.ideahut.sbms.sample.api.config.AppProperties;
+import com.github.ideahut.sbms.shared.moment.MomentHolder;
+import com.github.ideahut.sbms.shared.optional.mapper.SysParamMapper;
+import com.github.ideahut.sbms.shared.optional.sysparam.SysParam;
+import com.github.ideahut.sbms.shared.optional.sysparam.SysParamRepository;
 import com.ideahut.sbms.sample.api.entity.Test;
 import com.ideahut.sbms.sample.api.repository.TestRepository;
 import com.ideahut.sbms.sample.api.service.PhpTestService;
+import com.ideahut.sbms.sample.api.support.AppProperties;
 import com.ideahut.sbms.sample.client.dto.TestDto;
+import com.ideahut.sbms.sample.client.service.TestService;
 
 import io.swagger.annotations.ApiOperation;
 
@@ -51,6 +55,9 @@ public class TestController {
 	
 	@Autowired
 	private ModelMapper modelMapper;
+	
+	@Autowired
+	private TestService testService;
 
 	@Public
 	@RequestMapping(value = "/helo", method = {RequestMethod.GET, RequestMethod.POST})
@@ -122,6 +129,7 @@ public class TestController {
     public ResponseDto audit() {
 		
 		LOGGER.info("AUDIT");
+		MomentHolder.getMomentAttributes().setAuditor(new Auditor("9", "test"));
 		Test test = new Test();
 		test.setName("AUDIT");
 		test = testRepository.save(test);
@@ -152,6 +160,13 @@ public class TestController {
 	@RequestMapping(value = "/cache", method = {RequestMethod.GET, RequestMethod.POST})
     public ResponseDto cache() {
 		return ResponseDto.SUCCESS(cacheGroup.groups());
+	}
+	
+	@Public
+	@RequestMapping(value = "/test", method = {RequestMethod.GET, RequestMethod.POST})
+    public ResponseDto test(@RequestParam("value") BigDecimal value) {
+		TestDto result = testService.test(value);
+		return ResponseDto.SUCCESS(result);
 	}
 	
 }

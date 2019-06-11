@@ -26,7 +26,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
-import com.ideahut.sbms.sample.api.access.AccessHandlerInterceptor;
+import com.ideahut.sbms.sample.api.interceptor.AccessHandlerInterceptor;
 import com.ideahut.sbms.sample.client.Constants;
 
 @Configuration

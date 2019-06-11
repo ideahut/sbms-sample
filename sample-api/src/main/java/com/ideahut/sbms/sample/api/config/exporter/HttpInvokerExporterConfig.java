@@ -1,17 +1,17 @@
-package com.ideahut.sbms.sample.api.exporter;
+package com.ideahut.sbms.sample.api.config.exporter;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import com.github.ideahut.sbms.client.service.RemoteMethodService;
-import com.github.ideahut.sbms.shared.remote.cutom.HttpInvokerServiceExporter;
+import com.github.ideahut.sbms.client.remote.RemoteMethodService;
 import com.github.ideahut.sbms.shared.remote.service.ServiceExporterBase;
 import com.github.ideahut.sbms.shared.remote.service.ServiceExporterInterceptor;
+import com.github.ideahut.sbms.shared.remote.service.exporter.HttpInvokerServiceExporter;
 import com.ideahut.sbms.sample.client.service.TestService;
 
 @Configuration
-public class HttpInvokerExporter extends ServiceExporterBase {
+public class HttpInvokerExporterConfig extends ServiceExporterBase {
 	
 	private static final String PATH = "/httpinvoker";
 	
@@ -24,11 +24,13 @@ public class HttpInvokerExporter extends ServiceExporterBase {
 	
 	@Bean(name = PATH + "/TestService")
 	public HttpInvokerServiceExporter TestServiceExporter() {
-		return export(
+		HttpInvokerServiceExporter exporter = export(
 			HttpInvokerServiceExporter.class, 
 			TestService.class, 
 			testService
-		).setInterceptor(interceptor);
+		);
+		exporter.addInterceptor(interceptor);
+		return exporter;
 	}
 	
 	
@@ -37,10 +39,12 @@ public class HttpInvokerExporter extends ServiceExporterBase {
 	
 	@Bean(name = PATH + "/RemoteMethodService")
 	public HttpInvokerServiceExporter RemoteMethodServiceExporter() {
-		return export(
+		HttpInvokerServiceExporter exporter = export(
 			HttpInvokerServiceExporter.class, 
 			RemoteMethodService.class, 
 			remoteMethodService
-		).setInterceptor(interceptor);
+		);
+		exporter.addInterceptor(interceptor);
+		return exporter;
 	}
 }

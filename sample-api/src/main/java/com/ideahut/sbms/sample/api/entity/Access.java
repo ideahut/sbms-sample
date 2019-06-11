@@ -1,10 +1,5 @@
 package com.ideahut.sbms.sample.api.entity;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.TimeZone;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -19,6 +14,7 @@ import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
+import com.github.ideahut.sbms.common.util.TimeUtil;
 import com.github.ideahut.sbms.shared.annotation.Auditable;
 import com.github.ideahut.sbms.shared.entity.EntityTime;
 
@@ -50,7 +46,7 @@ public class Access extends EntityTime<String> {
 
 	@ManyToOne(targetEntity = User.class, fetch = FetchType.EAGER)
 	@OnDelete(action = OnDeleteAction.CASCADE)
-	@JoinColumn(name = "user", nullable = true)
+	@JoinColumn(name = "user_id", nullable = true)
 	public User getUser() {
 		return user;
 	}
@@ -80,21 +76,8 @@ public class Access extends EntityTime<String> {
 	
 	public boolean hasExpired() {
 		if (null == expiration) return true;
-		Long now = currentTimeMillis() + 1;
+		Long now = TimeUtil.getGMTCurrentTimeMillis();
 		return now > expiration;
-	}
-	
-	public static Long currentTimeMillis() {
-		DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
-		Date now = new Date();
-		String value = format.format(now);
-		TimeZone gmt = TimeZone.getTimeZone("GMT");
-		format.setTimeZone(gmt);
-		Long result = 0L;
-		try {
-			result = format.parse(value).getTime();
-		} catch (Exception e) {}
-		return result;
 	}
 	
 }

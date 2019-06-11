@@ -1,4 +1,4 @@
-package com.ideahut.sbms.sample.api.proxy;
+package com.ideahut.sbms.sample.api.config.proxy;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -7,7 +7,7 @@ import org.springframework.remoting.caucho.HessianProxyFactoryBean;
 import com.ideahut.sbms.sample.api.service.PhpTestService;
 
 @Configuration
-public class PhpHessianProxy {
+public class PhpHessianProxyConfig {
 	
 	private final String BASE_URL = "http://localhost:58080/hessian";
 	

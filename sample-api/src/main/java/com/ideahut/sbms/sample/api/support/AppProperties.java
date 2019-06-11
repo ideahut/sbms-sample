@@ -1,17 +1,24 @@
-package com.ideahut.sbms.sample.api.config;
+package com.ideahut.sbms.sample.api.support;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import org.hibernate.cfg.AvailableSettings;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 @Component
 @ConfigurationProperties(prefix = "app")
 public class AppProperties {
+	
+	@Autowired
+	private Environment environment;
 	
 	private Cache cache = new Cache();
 	
@@ -64,13 +71,29 @@ public class AppProperties {
 		this.ignoredHandlerClasses = ignoredHandlerClasses;
 	}
 
-
-
-
-
-
-
-
+	
+	public Map<String, Object> getHibernateProperties(String prefix) {
+		try {
+			Map<String, Object> properties = new HashMap<String, Object>();
+			for (Field field : AvailableSettings.class.getDeclaredFields()) {
+				field.setAccessible(true);
+				String key = String.valueOf(field.get(null));
+				if (!key.startsWith("hibernate.")) continue;
+				Object value =  environment.getProperty(prefix + "." + key);
+				if (value == null) continue;
+				properties.put(key, value);
+			}			
+			return properties;
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+	
+	public Environment getEnvironment() {
+		return environment;
+	}
+	
+	
 
 	public static class Task {
 		private Executor executor = new Executor();		

@@ -1,36 +1,32 @@
-package com.ideahut.sbms.sample.api.access;
+package com.ideahut.sbms.sample.api.interceptor;
 
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.List;
 
-import org.springframework.beans.factory.InitializingBean;
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 
 import com.github.ideahut.sbms.client.dto.ResponseDto;
-import com.github.ideahut.sbms.client.service.RemoteMethodService;
 import com.github.ideahut.sbms.common.cache.CacheGroup;
 import com.github.ideahut.sbms.shared.annotation.Login;
 import com.github.ideahut.sbms.shared.annotation.Public;
-import com.github.ideahut.sbms.shared.audit.AuditExecutor;
 import com.github.ideahut.sbms.shared.audit.Auditor;
-import com.github.ideahut.sbms.shared.entity.EntityInterceptor;
 import com.github.ideahut.sbms.shared.helper.MessageHelper;
-import com.github.ideahut.sbms.shared.moment.MomentAttributes;
+import com.github.ideahut.sbms.shared.interceptor.BaseServiceExporterInterceptor;
 import com.github.ideahut.sbms.shared.moment.MomentHolder;
-import com.github.ideahut.sbms.shared.remote.service.ServiceExporterInterceptor;
 import com.github.ideahut.sbms.shared.remote.service.ServiceExporterRequest;
 import com.github.ideahut.sbms.shared.remote.service.ServiceExporterResult;
+import com.github.ideahut.sbms.shared.util.RequestUtil;
+import com.ideahut.sbms.sample.api.access.AccessHolder;
+import com.ideahut.sbms.sample.api.access.AccessInfo;
 import com.ideahut.sbms.sample.api.entity.Access;
 import com.ideahut.sbms.sample.api.entity.User;
 import com.ideahut.sbms.sample.api.repository.AccessRepository;
 import com.ideahut.sbms.sample.api.support.AppConstant;
 import com.ideahut.sbms.sample.client.Constants;
 
-public class AccessExporterInterceptor implements ServiceExporterInterceptor, InitializingBean {
-	
-	@Autowired(required = false)
-	private AuditExecutor auditExecutor;
+public class AccessExporterInterceptor extends BaseServiceExporterInterceptor {
 	
 	@Autowired
 	private MessageHelper messageHelper;
@@ -41,53 +37,10 @@ public class AccessExporterInterceptor implements ServiceExporterInterceptor, In
 	@Autowired
 	private AccessRepository accessRepository;
 	
-	private List<EntityInterceptor> entityInterceptors;
-	
-	public AccessExporterInterceptor setEntityInterceptors(List<EntityInterceptor> entityInterceptors) {
-		this.entityInterceptors = entityInterceptors;
-		return this;
-	}
-	
-	public AccessExporterInterceptor addEntityInterceptor(EntityInterceptor entityInterceptor) {
-		if (entityInterceptors == null) {
-			entityInterceptors = new ArrayList<EntityInterceptor>();
-		}
-		entityInterceptors.add(entityInterceptor);
-		return this;
-	}
-	
-	@Override
-	public void afterPropertiesSet() throws Exception {
-		/*
-		if (auditExecutor != null) {
-			if (entityInterceptors == null) {
-				entityInterceptors = new ArrayList<EntityInterceptor>();
-			}
-			boolean available = false;
-			for (EntityInterceptor interceptor : entityInterceptors) {
-				if (interceptor instanceof DefaultAuditEntityInterceptor) {
-					available = true;
-					break;
-				}
-			}
-			if (!available) {
-				entityInterceptors.add(new DefaultAuditEntityInterceptor());
-			}
-		}
-		*/
-	}
-
 	@Override
 	public ResponseDto beforeInvoke(ServiceExporterRequest request) {
+		
 		Method method = request.getMethod();
-		if (RemoteMethodService.class.equals(method.getDeclaringClass())) {
-			return null;
-		}
-		try {
-			method = request.getExporter().getService().getClass().getMethod(method.getName(), method.getParameterTypes());
-		} catch (Exception e) {
-			return ResponseDto.ERROR("99", e.getMessage());
-		}
 		
 		Public annotPublic 	= method.getAnnotation(Public.class);
 		boolean isPublic 	= annotPublic != null && annotPublic.value() == true;
@@ -106,11 +59,14 @@ public class AccessExporterInterceptor implements ServiceExporterInterceptor, In
 				if (access == null) {
 					return ResponseDto.ERROR(messageHelper.getCodeMessage("E.02", true, "LBL.ACCESS"));
 				}
-				// TODO: perlu dicari mekanisme validasi untuk ServiceExporter
-				//String validation = request.getRemoteAddr() + " " + RequestUtil.getHeader(HttpHeaders.USER_AGENT);
-				//if (!validation.equals(access.getValidation())) {
-				//	throw new ResponseException(ResponseDto.ERROR(messageHelper.getCodeMessage("E.06", "LBL.ACCESS")));
-				//}				
+				HttpServletRequest httpRequest = request.getRequest();
+				if (httpRequest != null) {
+					// TODO: perlu dicari mekanisme validasi untuk RmiServiceExporter
+					String validation = httpRequest.getRemoteAddr() + " " + RequestUtil.getHeader(httpRequest, HttpHeaders.USER_AGENT);
+					if (!validation.equals(access.getValidation())) {
+						return ResponseDto.ERROR(messageHelper.getCodeMessage("E.06", true, "LBL.ACCESS"));
+					}
+				}				
 				if (access.hasExpired()) {
 					cacheGroup.remove(AppConstant.CacheGroup.ACCESS, key);
 					accessRepository.deleteById(key);
@@ -122,14 +78,12 @@ public class AccessExporterInterceptor implements ServiceExporterInterceptor, In
 				}				
 			}
 		}
-		MomentAttributes momentAttributes = MomentHolder.findMomentAttributes(true);
 		User user = access != null ? access.getUser() : null;
 		if (user != null) {
-			momentAttributes.setAuditor(new Auditor(String.valueOf(user.getId()), user.getUsername()));
+			MomentHolder.getMomentAttributes().setAuditor(new Auditor(String.valueOf(user.getId()), user.getUsername()));
 		}
-		momentAttributes.setEntityInterceptorList(entityInterceptors);
 		String language = (String)request.getAttribute(Constants.Request.Attribute.LANGUAGE);
-		momentAttributes.setLanguage(language);
+		MomentHolder.getMomentAttributes().setLanguage(language);
 		AccessHolder.set(new AccessInfo(key, access, null, request).setAccessPublic(isPublic).setMustLogin(mustLogin));
 				
 		return null;
@@ -137,10 +91,6 @@ public class AccessExporterInterceptor implements ServiceExporterInterceptor, In
 
 	@Override
 	public void afterInvoke(ServiceExporterRequest request, ServiceExporterResult result) {
-		if (auditExecutor != null) {
-			auditExecutor.run();
-		}
-		MomentHolder.removeMomentAttributes();
 		AccessHolder.remove();
 	}
 	

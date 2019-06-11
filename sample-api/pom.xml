@@ -36,26 +36,33 @@
 			<artifactId>sample-client</artifactId>
 			<version>1.0.0</version>		
 		</dependency>
+		
+		<!-- SBMS-HESSIAN -->
+		<dependency>
+			<groupId>com.github.ideahut</groupId>
+			<artifactId>sbms-hessian</artifactId>
+			<version>1.0.0</version>			
+		</dependency>
 	
 		<!-- SBMS-CLIENT -->
 		<dependency>
 			<groupId>com.github.ideahut</groupId>
 			<artifactId>sbms-client</artifactId>
-			<version>2.0.0</version>			
+			<version>2.0.1</version>			
 		</dependency>
 		
 		<!-- SBMS-COMMON -->
 		<dependency>
 			<groupId>com.github.ideahut</groupId>
 			<artifactId>sbms-common</artifactId>
-			<version>2.0.0</version>			
+			<version>2.0.1</version>			
 		</dependency>
 	
 		<!-- SBMS-SHARED -->
 		<dependency>
 			<groupId>com.github.ideahut</groupId>
 			<artifactId>sbms-shared</artifactId>
-			<version>2.0.0</version>
+			<version>2.0.1</version>
 		</dependency>	
 	
 		<!-- SPRINGBOOT --> 
@@ -82,13 +89,6 @@
     		<scope>test</scope>    		
 		</dependency>
 			
-		<!-- MYSQL -->
-		<dependency>
-			<groupId>mysql</groupId>
-			<artifactId>mysql-connector-java</artifactId>
-			<scope>provided</scope>
-		</dependency>
-		
 		<!-- DBCP -->
 		<dependency>
 			<groupId>com.zaxxer</groupId>
@@ -137,6 +137,33 @@
 		    <groupId>commons-io</groupId>
 		    <artifactId>commons-io</artifactId>
 		    <version>2.6</version>
+		</dependency>
+		
+		<!-- MYSQL -->
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		
+		<!-- POSTGRESQL -->
+		<dependency>
+			<groupId>org.postgresql</groupId>
+			<artifactId>postgresql</artifactId>
+		</dependency>
+		
+		<!-- SQLSERVER -->
+		<dependency>
+            <groupId>com.microsoft.sqlserver</groupId>
+            <artifactId>mssql-jdbc</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        
+        <!-- ORACLE -->
+        <dependency>
+		    <groupId>com.oracle</groupId>
+		    <artifactId>ojdbc8</artifactId>
+		    <version>12.2.0.1</version>
 		</dependency>
 		
 	</dependencies>

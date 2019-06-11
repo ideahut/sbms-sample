@@ -3,25 +3,63 @@ server:
   #servlet:
     #context-path: /api
 
+debug: false
+
 spring:
   application:
     name: sbms_sample_api
   main:
     banner-mode: "off"
   datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/sbms_sample_api?createDatabaseIfNotExist=true&autoReconnect=true
-    username: root
-    password: root
+    ## MYSQL ##
+    #driver-class-name: com.mysql.cj.jdbc.Driver
+    #jdbc-url: jdbc:mysql://localhost:3306/sbms_sample_api?createDatabaseIfNotExist=true&autoReconnect=true
+    #username: root
+    #password: root
+    
+    ## POSTGRESQL ##
+    #driver-class-name: org.postgresql.Driver
+    #jdbc-url: jdbc:postgresql://localhost:5432/sbms_sample_api
+    #username: postgres
+    #password: postgres
+    
+    ## SQLSERVER ## https://dzone.com/articles/configuring-spring-boot-for-microsoft-sql-server
+    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+    jdbc-url: jdbc:sqlserver://localhost;databaseName=sbms_sample_api
+    username: sa
+    password: sa12345
+    
   jpa:
-    database: MYSQL
-    show-sql: false
-    hibernate:
-      ddl-auto: update
+    ## MYSQL ##
+    #database: MYSQL
+    #properties:
+      #hibernate:
+        #hbm2ddl:
+          #auto: update
+        #dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+        #show_sql: false
+    
+    ## POSTGRESQL ##
+    #database: POSTGRESQL
+    #properties:
+      #hibernate:
+        #hbm2ddl:
+          #auto: update
+        #dialect: org.hibernate.dialect.PostgreSQLDialect
+        #show_sql: false
+        #jdbc:
+          #lob:
+            #non_contextual_creation: true          
+
+    ## SQLSERVER ##
+    database: SQL_SERVER
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.MySQL5InnoDBDialect          
-      
+        hbm2ddl:
+          auto: update
+        dialect: org.hibernate.dialect.SQLServer2012Dialect
+        show_sql: false 
+             
   #profiles:
     #active: local
 
@@ -63,9 +101,9 @@ app:
     
         
 swagger:
-  package: com.idh.ms.core.controller
+  package: com.ideahut.sbms.sample.api.controller
   info:
-    title: Microservice Sample
+    title: Spring Boot Microservice - Sample
     license: IDEAHUT
     licenseUrl: https://github.com/ideahut
     termsOfServiceUrl: https://github.com/ideahut
@@ -87,13 +125,75 @@ logging:
         sbms:
           sample:
             api: DEBUG
-  
-cors:
-  origin: "*"
-  headers: X-Requested-With, Content-Type, Accept, Origin, Authorization
-  methods: GET, POST, PUT, DELETE, OPTIONS, PATCH
-  credentials: true
-  maxage: 3600
+
+
+filter:
+  cors:
+    origin: "*"
+    headers: X-Requested-With, Content-Type, Accept, Origin, Authorization
+    methods: GET, POST, PUT, DELETE, OPTIONS, PATCH
+    credentials: true
+    maxage: 3600
 
 
 
+audit:
+  datasource:
+    ## MYSQL ##
+    #driver-class-name: com.mysql.cj.jdbc.Driver
+    #jdbc-url: jdbc:mysql://localhost:3306/sbms_sample_api_audit?createDatabaseIfNotExist=true&autoReconnect=true
+    #username: root
+    #password: root
+    
+    ## POSTGRESQL ##
+    #driver-class-name: org.postgresql.Driver
+    #jdbc-url: jdbc:postgresql://localhost:5432/sbms_sample_api_audit
+    #username: postgres
+    #password: postgres
+    
+    ## SQLSERVER ##
+    #driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+    #jdbc-url: jdbc:sqlserver://localhost;databaseName=sbms_sample_api_audit
+    #username: sa
+    #password: sa12345
+    
+    ## ORACLE ##
+    driver-class-name: oracle.jdbc.driver.OracleDriver
+    jdbc-url: jdbc:oracle:thin:@localhost:1521:xe
+    username: sbms_sample_api_audit
+    password: sbms_sample_api_audit
+    
+  jpa:
+    ## MYSQL ##
+    #database: MYSQL
+    #properties:
+      #hibernate:
+        #hbm2ddl:
+          #auto: update
+        #dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+        #show_sql: false
+        
+    ## POSTGRESQL ##
+    #database: POSTGRESQL
+    #properties:
+      #hibernate:
+        #hbm2ddl:
+          #auto: update
+        #dialect: org.hibernate.dialect.PostgreSQLDialect
+        #show_sql: false
+        #jdbc:
+          #lob:
+            #non_contextual_creation: true
+    
+    ## SQLSERVER ## 
+    database: SQL_SERVER
+    properties:
+      hibernate:
+        hbm2ddl:
+          auto: update
+        dialect: org.hibernate.dialect.SQLServer2012Dialect
+        show_sql: false
+    
+    ## ORACLE ## http://javadevcorner.com/maven-add-oracle-jdbc-driver-to-repository/
+    
+    

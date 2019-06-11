@@ -13,7 +13,7 @@ import org.springframework.boot.autoconfigure.web.servlet.error.BasicErrorContro
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
-import com.github.ideahut.sbms.client.service.RemoteMethodService;
+import com.github.ideahut.sbms.client.remote.RemoteMethodService;
 import com.github.ideahut.sbms.shared.audit.AuditExecutor;
 import com.github.ideahut.sbms.shared.moment.MomentHolder;
 import com.github.ideahut.sbms.shared.remote.service.ServiceExporterBase;

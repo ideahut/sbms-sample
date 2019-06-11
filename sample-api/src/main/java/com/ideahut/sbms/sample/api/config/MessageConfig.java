@@ -16,6 +16,7 @@ import org.springframework.web.servlet.i18n.AcceptHeaderLocaleResolver;
 import com.github.ideahut.sbms.shared.helper.MessageHelper;
 import com.github.ideahut.sbms.shared.helper.impl.MessageHelperImpl;
 import com.github.ideahut.sbms.shared.util.RequestUtil;
+import com.ideahut.sbms.sample.api.support.AppProperties;
 
 @Configuration
 public class MessageConfig {

@@ -14,7 +14,7 @@ import com.github.ideahut.sbms.client.exception.ResponseRuntimeException;
 
 @ControllerAdvice
 public class ErrorHandler {	
-
+	
     @ExceptionHandler
     @ResponseStatus(code = HttpStatus.OK)
     @ResponseBody

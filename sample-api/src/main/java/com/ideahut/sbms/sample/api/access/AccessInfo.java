@@ -1,7 +1,5 @@
 package com.ideahut.sbms.sample.api.access;
 
-import java.io.Serializable;
-
 import javax.servlet.http.HttpServletRequest;
 
 import com.github.ideahut.sbms.shared.remote.service.ServiceExporterRequest;
@@ -93,58 +91,6 @@ public class AccessInfo {
 	public AccessInfo setMustLogin(boolean mustLogin) {
 		this.mustLogin = mustLogin;
 		return this;
-	}
-
-	public String getHeader(String name) {
-		if (httpRequest != null) {
-			String value = httpRequest.getHeader(name);
-			if (value == null) {
-				value = httpRequest.getHeader(name.toLowerCase());
-			}
-			if (value != null) {
-				return value;
-			}
-		}
-		if (exporterRequest != null) {
-			String value = exporterRequest.getHeader(name);
-			if (value == null) {
-				value = exporterRequest.getHeader(name.toLowerCase());
-			}
-			if (value != null) {
-				return value;
-			}
-		}
-		return null;
-	}
-	
-	public String getHeaderOneOf(String...names) {
-		for (String name : names) {
-			String value = getHeader(name);
-			if (value != null) {
-				return value;
-			}
-		}
-		return null;
-	}
-	
-	public String getValue(String name) {
-		if (exporterRequest != null) {
-			Serializable value = exporterRequest.getAttribute(name);
-			if (value != null) {
-				return String.valueOf(value);
-			}
-		}
-		return getHeader(name); 
-	}
-	
-	public String getValueOneOf(String...names) {
-		for (String name : names) {
-			String value = getValue(name);
-			if (value != null) {
-				return value;
-			}
-		}
-		return null;
-	}
+	}	
 	
 }

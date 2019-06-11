@@ -9,6 +9,7 @@ import com.github.ideahut.sbms.common.cache.CacheValueColletor;
 import com.github.ideahut.sbms.common.cache.LocalCacheGroup;
 import com.ideahut.sbms.sample.api.entity.Access;
 import com.ideahut.sbms.sample.api.repository.AccessRepository;
+import com.ideahut.sbms.sample.api.support.AppProperties;
 
 @Configuration
 public class CacheConfig {
@@ -58,6 +59,8 @@ public class CacheConfig {
 	 * DAFTAR COLLECTOR
 	 */
 	
+	
+	@SuppressWarnings("serial")
 	public CacheValueColletor<String, Access> accessCollector() {
 		return new CacheValueColletor<String, Access>() {
 			@Override
