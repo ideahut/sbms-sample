@@ -2,8 +2,8 @@ package com.ideahut.sbms.sample.api.config.proxy;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.remoting.caucho.HessianProxyFactoryBean;
 
+import com.github.ideahut.sbms.hessian.proxy.HessianProxyFactoryBean;
 import com.ideahut.sbms.sample.api.service.PhpTestService;
 
 @Configuration

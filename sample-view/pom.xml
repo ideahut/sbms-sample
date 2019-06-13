@@ -43,21 +43,21 @@
 		<dependency>
 			<groupId>com.github.ideahut</groupId>
 			<artifactId>sbms-client</artifactId>
-			<version>2.0.1</version>
+			<version>2.0.2</version>
 		</dependency>
 		
 		<!-- SBMS-COMMON -->
 		<dependency>
 			<groupId>com.github.ideahut</groupId>
 			<artifactId>sbms-common</artifactId>
-			<version>2.0.1</version>			
+			<version>2.0.2</version>			
 		</dependency>
 	
 		<!-- SBMS-SHARED -->
 		<dependency>
 			<groupId>com.github.ideahut</groupId>
 			<artifactId>sbms-shared</artifactId>
-			<version>2.0.1</version>
+			<version>2.0.2</version>
 		</dependency>
 		
 		<!-- SPRINGBOOT -->

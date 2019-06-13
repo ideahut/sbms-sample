@@ -13,6 +13,7 @@ public class RmiTestServiceTest {
 		RmiProxyFactoryBean proxy = new RmiProxyFactoryBean();
 		proxy.setServiceInterface(TestService.class);
 		proxy.setServiceUrl("rmi://localhost:1699/TestService");
+		proxy.setRefreshStubOnConnectFailure(true);
 		proxy.afterPropertiesSet();
 		return (TestService)proxy.getObject();
 	}

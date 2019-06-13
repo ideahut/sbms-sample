@@ -3,7 +3,6 @@ package test.ideahut.sbms.sample.api.proxy;
 import java.math.BigDecimal;
 
 import org.junit.Test;
-import org.springframework.remoting.httpinvoker.HttpInvokerProxyFactoryBean;
 
 import com.github.ideahut.sbms.client.dto.CodeMessageDto;
 import com.github.ideahut.sbms.client.dto.ResponseDto;
@@ -11,6 +10,7 @@ import com.github.ideahut.sbms.client.exception.ResponseException;
 import com.github.ideahut.sbms.client.remote.RemoteMethodHandler;
 import com.github.ideahut.sbms.client.remote.RemoteMethodParameter;
 import com.github.ideahut.sbms.client.remote.RemoteMethodService;
+import com.github.ideahut.sbms.httpinvoker.proxy.HttpInvokerProxyFactoryBean;
 import com.ideahut.sbms.sample.client.dto.TestDto;
 import com.ideahut.sbms.sample.client.service.TestService;
 

@@ -10,7 +10,7 @@ import com.github.ideahut.sbms.client.exception.ResponseException;
 import com.github.ideahut.sbms.client.remote.RemoteMethodHandler;
 import com.github.ideahut.sbms.client.remote.RemoteMethodParameter;
 import com.github.ideahut.sbms.client.remote.RemoteMethodService;
-import com.github.ideahut.sbms.hessian.client.HessianProxyFactoryBean;
+import com.github.ideahut.sbms.hessian.proxy.HessianProxyFactoryBean;
 import com.ideahut.sbms.sample.client.dto.TestDto;
 import com.ideahut.sbms.sample.client.service.TestService;
 

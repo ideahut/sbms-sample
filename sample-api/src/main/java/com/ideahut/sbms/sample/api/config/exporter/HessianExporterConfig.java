@@ -5,32 +5,32 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import com.github.ideahut.sbms.client.remote.RemoteMethodService;
-import com.github.ideahut.sbms.shared.remote.service.ServiceExporterBase;
 import com.github.ideahut.sbms.shared.remote.service.ServiceExporterInterceptor;
 import com.github.ideahut.sbms.shared.remote.service.exporter.HessianServiceExporter;
 import com.ideahut.sbms.sample.client.service.TestService;
 
 @Configuration
-public class HessianExporterConfig extends ServiceExporterBase {
+public class HessianExporterConfig {
 	
 	private static final String PATH = "/hessian"; 
 	
 	@Autowired
 	private ServiceExporterInterceptor interceptor;
 	
+	private<T> HessianServiceExporter setup(Class<T> serviceInterface, T service) {
+		HessianServiceExporter exporter = new HessianServiceExporter();
+		exporter.setServiceInterface(serviceInterface);
+		exporter.setService(service);
+		exporter.addInterceptor(interceptor);
+		return exporter;
+	}
 	
 	@Autowired
 	private TestService testService;
 	
 	@Bean(name = PATH + "/TestService")
 	public HessianServiceExporter TestServiceExporter() {
-		HessianServiceExporter exporter = export(
-			HessianServiceExporter.class, 
-			TestService.class, 
-			testService
-		);
-		exporter.addInterceptor(interceptor);
-		return exporter;
+		return setup(TestService.class, testService);
 	}
 		
 	
@@ -39,12 +39,6 @@ public class HessianExporterConfig extends ServiceExporterBase {
 	
 	@Bean(name = PATH + "/RemoteMethodService")
 	public HessianServiceExporter RemoteMethodServiceExporter() {
-		HessianServiceExporter exporter = export(
-			HessianServiceExporter.class, 
-			RemoteMethodService.class, 
-			remoteMethodService
-		);
-		exporter.addInterceptor(interceptor);
-		return exporter;
+		return setup(RemoteMethodService.class, remoteMethodService);
 	}
 }

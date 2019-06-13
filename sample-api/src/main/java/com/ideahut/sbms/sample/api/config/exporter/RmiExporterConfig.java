@@ -5,34 +5,32 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import com.github.ideahut.sbms.client.remote.RemoteMethodService;
-import com.github.ideahut.sbms.shared.remote.service.ServiceExporterBase;
 import com.github.ideahut.sbms.shared.remote.service.ServiceExporterInterceptor;
 import com.github.ideahut.sbms.shared.remote.service.exporter.RmiServiceExporter;
 import com.ideahut.sbms.sample.client.service.TestService;
 
 @Configuration
-public class RmiExporterConfig extends ServiceExporterBase {
-	
-	private static final int PORT = 1699;
+public class RmiExporterConfig {
 	
 	@Autowired
 	private ServiceExporterInterceptor interceptor;
 	
+	private<T> RmiServiceExporter setup(Class<T> serviceInterface, T service, String serviceName) {
+		RmiServiceExporter exporter = new RmiServiceExporter();
+		exporter.setServiceInterface(serviceInterface);
+		exporter.setService(service);
+		exporter.setRegistryPort(1699);
+		exporter.setServiceName(serviceName);
+		exporter.addInterceptor(interceptor);
+		return exporter;
+	}
 	
 	@Autowired
 	private TestService testService;
 	
 	@Bean
 	public RmiServiceExporter TestServiceExporter() {
-		RmiServiceExporter exporter = export(
-			RmiServiceExporter.class, 
-			TestService.class, 
-			testService, 
-			PORT, 
-			"TestService"
-		);
-		exporter.addInterceptor(interceptor);
-		return exporter;
+		return setup(TestService.class, testService, "TestService");
 	}
 	
 	
@@ -41,14 +39,7 @@ public class RmiExporterConfig extends ServiceExporterBase {
 	
 	@Bean
 	public RmiServiceExporter RemoteMethodServiceExporter() {
-		RmiServiceExporter exporter = export(
-			RmiServiceExporter.class, 
-			RemoteMethodService.class, 
-			remoteMethodService, 
-			PORT, 
-			"RemoteMethodService"
-		);
-		exporter.addInterceptor(interceptor);
-		return exporter;
+		return setup(RemoteMethodService.class, remoteMethodService, "RemoteMethodService");
 	}
+	
 }

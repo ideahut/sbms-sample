@@ -12,10 +12,10 @@ spring:
     banner-mode: "off"
   datasource:
     ## MYSQL ##
-    #driver-class-name: com.mysql.cj.jdbc.Driver
-    #jdbc-url: jdbc:mysql://localhost:3306/sbms_sample_api?createDatabaseIfNotExist=true&autoReconnect=true
-    #username: root
-    #password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    jdbc-url: jdbc:mysql://localhost:3306/sbms_sample_api?createDatabaseIfNotExist=true&autoReconnect=true
+    username: root
+    password: root
     
     ## POSTGRESQL ##
     #driver-class-name: org.postgresql.Driver
@@ -24,20 +24,20 @@ spring:
     #password: postgres
     
     ## SQLSERVER ## https://dzone.com/articles/configuring-spring-boot-for-microsoft-sql-server
-    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
-    jdbc-url: jdbc:sqlserver://localhost;databaseName=sbms_sample_api
-    username: sa
-    password: sa12345
+    #driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+    #jdbc-url: jdbc:sqlserver://localhost;databaseName=sbms_sample_api
+    #username: sa
+    #password: sa12345
     
   jpa:
     ## MYSQL ##
-    #database: MYSQL
-    #properties:
-      #hibernate:
-        #hbm2ddl:
-          #auto: update
-        #dialect: org.hibernate.dialect.MySQL5InnoDBDialect
-        #show_sql: false
+    database: MYSQL
+    properties:
+      hibernate:
+        hbm2ddl:
+          auto: update
+        dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+        show_sql: false
     
     ## POSTGRESQL ##
     #database: POSTGRESQL
@@ -52,13 +52,16 @@ spring:
             #non_contextual_creation: true          
 
     ## SQLSERVER ##
-    database: SQL_SERVER
-    properties:
-      hibernate:
-        hbm2ddl:
-          auto: update
-        dialect: org.hibernate.dialect.SQLServer2012Dialect
-        show_sql: false 
+    #database: SQL_SERVER
+    #properties:
+      #hibernate:
+        #hbm2ddl:
+          #auto: update
+        #dialect: org.hibernate.dialect.SQLServer2012Dialect
+        #show_sql: false
+    
+    ## ORACLE ## http://javadevcorner.com/maven-add-oracle-jdbc-driver-to-repository/
+     
              
   #profiles:
     #active: local
@@ -140,10 +143,10 @@ filter:
 audit:
   datasource:
     ## MYSQL ##
-    #driver-class-name: com.mysql.cj.jdbc.Driver
-    #jdbc-url: jdbc:mysql://localhost:3306/sbms_sample_api_audit?createDatabaseIfNotExist=true&autoReconnect=true
-    #username: root
-    #password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    jdbc-url: jdbc:mysql://localhost:3306/sbms_sample_api_audit?createDatabaseIfNotExist=true&autoReconnect=true
+    username: root
+    password: root
     
     ## POSTGRESQL ##
     #driver-class-name: org.postgresql.Driver
@@ -158,20 +161,20 @@ audit:
     #password: sa12345
     
     ## ORACLE ##
-    driver-class-name: oracle.jdbc.driver.OracleDriver
-    jdbc-url: jdbc:oracle:thin:@localhost:1521:xe
-    username: sbms_sample_api_audit
-    password: sbms_sample_api_audit
+    #driver-class-name: oracle.jdbc.driver.OracleDriver
+    #jdbc-url: jdbc:oracle:thin:@localhost:1521:xe
+    #username: sbms_sample_api_audit
+    #password: sbms_sample_api_audit
     
   jpa:
     ## MYSQL ##
-    #database: MYSQL
-    #properties:
-      #hibernate:
-        #hbm2ddl:
-          #auto: update
-        #dialect: org.hibernate.dialect.MySQL5InnoDBDialect
-        #show_sql: false
+    database: MYSQL
+    properties:
+      hibernate:
+        hbm2ddl:
+          auto: update
+        dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+        show_sql: false
         
     ## POSTGRESQL ##
     #database: POSTGRESQL
@@ -186,14 +189,11 @@ audit:
             #non_contextual_creation: true
     
     ## SQLSERVER ## 
-    database: SQL_SERVER
-    properties:
-      hibernate:
-        hbm2ddl:
-          auto: update
-        dialect: org.hibernate.dialect.SQLServer2012Dialect
-        show_sql: false
-    
-    ## ORACLE ## http://javadevcorner.com/maven-add-oracle-jdbc-driver-to-repository/
-    
-    
+    #database: SQL_SERVER
+    #properties:
+      #hibernate:
+        #hbm2ddl:
+          #auto: update
+        #dialect: org.hibernate.dialect.SQLServer2012Dialect
+        #show_sql: false
+
